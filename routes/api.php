@@ -28,7 +28,8 @@ Route::group([
     Route::post('/myProfile', [\App\Http\Controllers\AuthController::class, 'authenticate']);
     Route::post('/storeProfilePhoto', [\App\Http\Controllers\Api\UserController::class, 'uploadProfilePhoto']);
     Route::post('/changeProfilePhoto', [\App\Http\Controllers\Api\UserController::class, 'updateProfilePhoto']);
-
-    Route::post('/discount', [\App\Http\Controllers\Api\DiscountController::class, 'calculateDiscounts']);
+    Route::post('/top-artists', [\App\Http\Controllers\Api\SpotifyController::class, 'getTopArtists']);
+    Route::post('/artist-all-track', [\App\Http\Controllers\Api\SpotifyController::class, 'getArtistTrack']);
+    Route::post('/genres-all-track', [\App\Http\Controllers\Api\SpotifyController::class, 'getGenresTrack']);
 
 });
