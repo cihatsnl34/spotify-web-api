@@ -9,6 +9,79 @@ use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
+
+    
+    /** @SWG\Post(
+     *     path="/api/storeProfilePhoto",
+     *     tags={"Profil storeProfilePhoto"},
+     *     summary="Profil storeProfilePhoto",
+     *     description="Profil storeProfilePhoto",
+     *     @SWG\Parameter(
+     *          name="token",
+     *          description="User token",
+     *          required=true,
+     *          type="string",
+     *          in="header"
+     *     ),
+     * @SWG\Parameter(
+     *          name="profile_photo",
+     *          description="User profile_photo",
+     *          required=true,
+     *          type="file",
+     *          in="query"
+     *     ),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="profile data",
+     *          @SWG\Schema(
+     *              type="object",
+     *              @SWG\Property(
+     *                  property="Profil fotoğrafi başariyla yüklendi",
+     *                  type="string")
+     *         )
+     *     ),
+     *     @SWG\Response(
+     *          response=400,
+     *          description="Yüklenecek bir dosya bulunamadi"
+     *     )
+     * )
+     */
+
+     /** @SWG\Post(
+     *     path="/api/changeProfilePhoto",
+     *     tags={"Profil changeProfilePhoto"},
+     *     summary="Profil changeProfilePhoto",
+     *     description="Profil changeProfilePhoto",
+     *     @SWG\Parameter(
+     *          name="token",
+     *          description="User token",
+     *          required=true,
+     *          type="string",
+     *          in="header"
+     *     ),
+     * @SWG\Parameter(
+     *          name="profile_photo",
+     *          description="User profile_photo",
+     *          required=true,
+     *          type="file",
+     *          in="query"
+     *     ),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="profile data",
+     *          @SWG\Schema(
+     *              type="object",
+     *              @SWG\Property(
+     *                  property="Profil fotoğrafi başariyla yüklendi",
+     *                  type="string")
+     *         )
+     *     ),
+     *     @SWG\Response(
+     *          response=400,
+     *          description="Yüklenecek bir dosya bulunamadi"
+     *     )
+     * )
+     */
     /**
      * Display a listing of the resource.
      *

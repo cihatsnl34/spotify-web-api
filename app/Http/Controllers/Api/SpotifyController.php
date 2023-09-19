@@ -14,6 +14,129 @@ use Illuminate\Support\Str;
 
 class SpotifyController extends Controller
 {
+
+    /** @SWG\Post(
+     *     path="/api/top-artists",
+     *     tags={"top-artists"},
+     *     summary="top-artists",
+     *     description="top-artiststop-artists",
+     *     @SWG\Parameter(
+     *          name="token",
+     *          description="User token",
+     *          required=true,
+     *          type="string",
+     *          in="header"
+     *     ),
+     * @SWG\Parameter(
+     *          name="token",
+     *          description="Spotify Token",
+     *          required=true,
+     *          type="string",
+     *          in="query"
+     *     ),
+     *   @SWG\Parameter(
+     *          name="limit",
+     *          description="Limit",
+     *          required=true,
+     *          type="integer",
+     *          in="query"
+     *     ),
+     *   @SWG\Parameter(
+     *          name="offset",
+     *          description="offset",
+     *          required=true,
+     *          type="integer",
+     *          in="query"
+     *     ),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="profile data",
+     *          @SWG\Schema(
+     *              type="object",
+     *              @SWG\Property(
+     *                  property="response",
+     *                  type="string")
+     *         )
+     *     ),
+     *     @SWG\Response(
+     *          response=401,
+     *          description="Unauthorized"
+     *     )
+     * )
+     */
+   /** @SWG\Post(
+     *     path="/api/artist-all-track",
+     *     tags={"artist-all-track"},
+     *     summary="artist-all-track",
+     *     description="artist-all-track",
+     *     @SWG\Parameter(
+     *          name="token",
+     *          description="User token",
+     *          required=true,
+     *          type="string",
+     *          in="header"
+     *     ),
+     * @SWG\Parameter(
+     *          name="name",
+     *          description="Singer Name",
+     *          required=true,
+     *          type="string",
+     *          in="query"
+     *     ),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="profile data",
+     *          @SWG\Schema(
+     *              type="object",
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="string")
+     *         )
+     *     ),
+     *     @SWG\Response(
+     *          response=401,
+     *          description="Unauthorized"
+     *     )
+     * )
+     */
+
+        /** @SWG\Post(
+     *     path="/api/genres-all-track",
+     *     tags={"genres-all-track"},
+     *     summary="genres-all-track",
+     *     description="genres-all-track",
+     *     @SWG\Parameter(
+     *          name="token",
+     *          description="User token",
+     *          required=true,
+     *          type="string",
+     *          in="header"
+     *     ),
+     * @SWG\Parameter(
+     *          name="genre",
+     *          description="Genre",
+     *          required=true,
+     *          type="string",
+     *          in="query"
+     *     ),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="profile data",
+     *          @SWG\Schema(
+     *              type="object",
+     *              @SWG\Property(
+     *                  property="data",
+     *                  type="string")
+     *         )
+     *     ),
+     *     @SWG\Response(
+     *          response=401,
+     *          description="Unauthorized"
+     *     )
+     * )
+     */
+
+
     protected $spotifyService;
 
     public function __construct(SpotifyService $spotifyService)
@@ -28,7 +151,6 @@ class SpotifyController extends Controller
             'offset' => 'required|integer',
             'token' => 'required|string'
         ];
-        $artistInfo = [];
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
@@ -37,58 +159,9 @@ class SpotifyController extends Controller
             return response()->json(array('errors' => $errors));
         }
 
-        $artists = $this->spotifyService->getTopArtists($request->limit, $request->offset, $request->token);
-
-        if (isset($artists['error'])) {
-            return response()->json([
-                'data' => $artists,
-            ], 401);
-        }
-        // Burada elde edilen verileri işleyebilirsiniz.
-        foreach ($artists['items'] as $key => $artist) {
-            $artistInfo[$key]['id'] = $artist['id'];
-            foreach ($artist['genres'] as $genresValue) {
-                $artistInfo[$key]['genres'][] = $genresValue;
-            }
-            $artistInfo[$key]['name'] = $artist['name'];
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $request->token,
-            ])->get("https://api.spotify.com/v1/artists/" . $artist['id'] . "/top-tracks?market=TR");
-            foreach ($response->json() as $value) {
-                foreach ($value as $childvalue) {
-                    $artistInfo[$key]['song'][] = $childvalue['name'];
-                }
-            }
-        }
-
-        foreach ($artistInfo as $artistInfoValue) {
-            $oldSinger = Singer::where('name', $artistInfoValue['name'])->first();
-            if (!$oldSinger) {
-                $singer = new Singer();
-                $singer->id = Str::uuid();
-                $singer->name = $artistInfoValue['name'];
-                $singer->save();
-            }
-            foreach ($artistInfoValue['genres'] as $genressValue) {
-                $oldGenre = Genre::where('name', $genressValue)->first();
-                if (!$oldGenre) {
-                    $genres = new Genre();
-                    $genres->id = Str::uuid();
-                    $genres->name = $genressValue;
-                    $genres->save();
-                }
-            }
-            foreach ($artistInfoValue['song'] as $songValue) {
-                $song = new Song();
-                $song->id = Str::uuid();
-                $song->name = $songValue;
-                $song->singer_id = $singer->id;
-                $song->genre = $genres->name;
-                $song->save();
-            }
-        }
+        $response = $this->spotifyService->getTopArtists($request->limit, $request->offset, $request->token);
         return response()->json([
-            'data' => 'saved',
+            'data' => $response,
         ], 200);
     }
     public function getArtistTrack(Request $request)

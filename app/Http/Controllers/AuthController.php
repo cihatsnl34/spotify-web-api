@@ -10,6 +10,147 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
+    /** @SWG\Post(
+     *     path="/api/auth/login",
+     *     tags={"Login"},
+     *     summary="Login işlemi",
+     *     description="Login işlemi",
+     *     @SWG\Parameter(
+     *          name="email",
+     *          description="User e-mail address",
+     *          required=true,
+     *          type="string",
+     *          in="query"
+     *     ),
+     *     @SWG\Parameter(
+     *          name="password",
+     *          description="User password",
+     *          required=true,
+     *          type="string",
+     *          in="query"
+     *     ),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="login is successful",
+     *          @SWG\Schema(
+     *              type="object",
+     *              @SWG\Property(
+     *                  property="token",
+     *                  type="string"
+     *             )
+     *          )
+     *     ),
+     *     @SWG\Response(
+     *          response=401,
+     *          description="Unauthorized"
+     *     )
+     * )
+     */
+    /** @SWG\Post(
+     *     path="/api/auth/register",
+     *     tags={"Register"},
+     *     summary="Register işlemi",
+     *     description="Register işlemi",
+     *     @SWG\Parameter(
+     *          name="email",
+     *          description="User e-mail address",
+     *          required=true,
+     *          type="string",
+     *          in="query"
+     *     ),
+     *     @SWG\Parameter(
+     *          name="password",
+     *          description="User password",
+     *          required=true,
+     *          type="string",
+     *          in="query"
+     *     ),
+     *      @SWG\Parameter(
+     *          name="name",
+     *          description="Name",
+     *          required=true,
+     *          type="string",
+     *          in="query"
+     *     ),
+     *      @SWG\Parameter(
+     *          name="phone",
+     *          description="Phone",
+     *          required=true,
+     *          type="string",
+     *          in="query"
+     *     ),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="register is successful",
+     *          @SWG\Schema(
+     *              type="object",
+     *              @SWG\Property(
+     *                  property="token",
+     *                  type="string"
+     *             )
+     *          )
+     *     ),
+     *     @SWG\Response(
+     *          response=401,
+     *          description="Unauthorized"
+     *     )
+     * )
+     */
+    /** @SWG\Post(
+     *     path="/api/myProfile",
+     *     tags={"Profil"},
+     *     summary="Profil bilgisi",
+     *     description="Profil bilgisi",
+     *     @SWG\Parameter(
+     *          name="token",
+     *          description="User token",
+     *          required=true,
+     *          type="string",
+     *          in="header"
+     *     ),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="profile data",
+     *          @SWG\Schema(
+     *              type="object",
+     *              @SWG\Property(
+     *                  property="user",
+     *                  type="integer"),
+     *             )
+     *         )
+     *     ),
+     *     @SWG\Response(
+     *          response=401,
+     *          description="Unauthorized"
+     *     )
+     * )
+     */
+    /** @SWG\Post(
+     *     path="/api/logout",
+     *     tags={"Logout"},
+     *     @SWG\Parameter(
+     *          name="token",
+     *          description="User token",
+     *          required=true,
+     *          type="string",
+     *          in="header"
+     *     ),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="profile logout",
+     *          @SWG\Schema(
+     *              type="object",
+     *              @SWG\Property(
+     *                  property="Cikis yapildi."
+     *             )
+     *         )
+     *     ),
+     *     @SWG\Response(
+     *          response=401,
+     *          description="Unauthorized"
+     *     )
+     * )
+     */
     public function register(Request $request)
     {
 
@@ -126,7 +267,7 @@ class AuthController extends Controller
         return response()->json([
             'user' => $user,
             'isLoggedIn' => Auth::check(),
-            
-        ],200);
+
+        ], 200);
     }
 }
